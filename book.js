@@ -16,18 +16,40 @@ function addBookToLibrary(name, author, genre) {
     myLibrary.push(newBook);
 }
 
+
 function displayBook () {
     const container = document.querySelector('.book-container');
     container.innerHTML = "";
     myLibrary.forEach(item => {
         const div = document.createElement("div");
+        div.className = "book-card";
+        
+        div.dataset.id = item.id;
         div.innerHTML = `
             <p>Book name: ${item.name}</p>
             <p>Book author: ${item.author}</p>
             <p>Book gene :${item.genre}</p>
         `;
+        
+        const removeBtn = document.createElement("button");
+        removeBtn.textContent = "Remove Book";
+        removeBtn.className = "remove-btn";
+        removeBtn.textContent = "Remove Button";
+
+        removeBtn.addEventListener("click", (e) => {
+            const id = div.dataset.id;
+            const index = myLibrary.findIndex(book => book.id === id);
+
+            if (index !== -1) {
+                myLibrary.splice(index, 1);
+                displayBook();
+            }
+        });
+
+        div.appendChild(removeBtn);
         container.appendChild(div);
     });
+
 }
 
 addBtn.addEventListener("click", (e) => {
