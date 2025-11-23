@@ -1,46 +1,33 @@
-// function Book (title, author, pages, read) {
-//     this.title = title;
-//     this.author = author;
-//     this.pages = pages;
-//     this.read = read;
-//     this.info = function () {
-//         if(this.read === 'false') {
-//             return `${this.title}, ${this.author}, ${this.pages}, not read yet`;
-//         } else {
-//             return `${this.title}, ${this.author}, ${this.pages}, finish reading`;
-//         }
-//     }
-// }
+document.addEventListener("DOMContentLoaded", function(){
+    displayBook();
+});
 
-// const goh = new Book('The god of high school', 'idk', '405', 'false');
-// console.log(goh.info());
+const myLibrary = [];
 
-function Hero(name, level) {
+function Book(name, author, genre) {
+    this.id = crypto.randomUUID();
     this.name = name;
-    this.level = level;
-}
-Hero.prototype.great = function () {
-    return `${this.name} says hello`;
+    this.author = author;
+    this.genre = genre
 }
 
-function Warrior(name, level, weapon) {
-    Hero.call(this, name, level);
-    this.weapon = weapon;
-}
-Warrior.prototype.attack = function () {
-    return `${this.name} attacks with the ${this.weapon}`;
-}
-function Healer(name, level, spell) {
-    Hero.call(this, name, level);
-    this.spell = spell;
-}
-Healer.prototype.heal = function () {
-    return `${this.name} attacks with the ${this.spell}`;
+function addBookToLibrary(name, author, genre) {
+    const newBook = new Book(name, author, genre);
+    myLibrary.push(newBook);
 }
 
-Object.setPrototypeOf(Warrior.prototype, Hero.prototype);
-Object.setPrototypeOf(Healer.prototype, Hero.prototype);
+function displayBook () {
+    const container = document.querySelector('.book-container');
+    container.innerHTML = "";
+    myLibrary.forEach(item => {
+        const div = document.createElement("div");
+        div.innerHTML = `
+            <p>Book name: ${item.name}</p>
+            <p>Book author: ${item.author}</p>
+            <p>Book gene :${item.genre}</p>
+        `;
+        container.appendChild(div);
+    });
+}
 
-const hero1 = new Warrior('Russel', 1, 'axe');
-const hero2 = new Healer('Gideon', 1, 'wind');
-console.log(hero1);
+addBookToLibrary('GOT', 'nay', 'highschool');
