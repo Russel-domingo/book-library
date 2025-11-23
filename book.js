@@ -1,6 +1,6 @@
-document.addEventListener("DOMContentLoaded", function(){
-    displayBook();
-});
+
+
+const addBtn = document.querySelector("#addBtn");
 
 const myLibrary = [];
 
@@ -30,4 +30,13 @@ function displayBook () {
     });
 }
 
-addBookToLibrary('GOT', 'nay', 'highschool');
+addBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    
+    const bookName = document.querySelector("#book-name").value;
+    const bookAuthor = document.querySelector("#book-author").value;
+    const bookGenre = document.querySelector("#book-genre").value;
+    
+    addBookToLibrary(bookName, bookAuthor, bookGenre);
+    displayBook();
+})
