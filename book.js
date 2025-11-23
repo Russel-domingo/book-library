@@ -8,7 +8,8 @@ function Book(name, author, genre) {
     this.id = crypto.randomUUID();
     this.name = name;
     this.author = author;
-    this.genre = genre
+    this.genre = genre;
+    this.read = false;
 }
 
 function addBookToLibrary(name, author, genre) {
@@ -30,11 +31,27 @@ function displayBook () {
             <p>Book author: ${item.author}</p>
             <p>Book gene :${item.genre}</p>
         `;
+        // read status
+        const readBtn = document.createElement("button");
+        if (item.read === false) {
+            
+            readBtn.textContent = "Mark as read";
+        } else {
+            readBtn.textContent = "Read";
+        }
         
+        readBtn.className ="read-btn";
+
+        readBtn.addEventListener("click", () => {
+            div.style.background = "green";
+            item.read = true;
+            readBtn.textContent = "Read"
+        })
+
+
         const removeBtn = document.createElement("button");
         removeBtn.textContent = "Remove Book";
         removeBtn.className = "remove-btn";
-        removeBtn.textContent = "Remove Button";
 
         removeBtn.addEventListener("click", (e) => {
             const id = div.dataset.id;
@@ -47,6 +64,7 @@ function displayBook () {
         });
 
         div.appendChild(removeBtn);
+        div.appendChild(readBtn);
         container.appendChild(div);
     });
 
