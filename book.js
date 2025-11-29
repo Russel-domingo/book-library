@@ -4,71 +4,78 @@ const addBtn = document.querySelector("#addBtn");
 
 const myLibrary = [];
 
-function Book(name, author, genre) {
-    this.id = crypto.randomUUID();
-    this.name = name;
-    this.author = author;
-    this.genre = genre;
-    this.read = false;
+class Book {
+    constructor (name, author, genre) {
+        this.id = crypto.randomUUID();
+        this.name = name;
+        this.author = author;
+        this.genre = genre;
+    }
 }
 
-function addBookToLibrary(name, author, genre) {
-    const newBook = new Book(name, author, genre);
-    myLibrary.push(newBook);
-}
+class Library {
+    constructor() {
+        this.books = [];
+        this.container = document.querySelector('.book-container');
+    }
 
+    addBook(name, author, genre){
+        const newBook = new Book(name, author, genre);
+        this.books.push[newBook];
+        this.displayBook();
+    }
 
-function displayBook () {
-    const container = document.querySelector('.book-container');
-    container.innerHTML = "";
-    myLibrary.forEach(item => {
-        const div = document.createElement("div");
-        div.className = "book-card";
-        
-        div.dataset.id = item.id;
-        div.innerHTML = `
-            <p>Book name: ${item.name}</p>
-            <p>Book author: ${item.author}</p>
-            <p>Book gene :${item.genre}</p>
-        `;
-        // read status
-        const readBtn = document.createElement("button");
-        if (item.read === false) {
-            
-            readBtn.textContent = "Mark as read";
-        } else {
-            readBtn.textContent = "Read";
+    removeBook(id){
+        this.books = this.books.filter(book => book.id !== id);
+        this.displayBook();
+    }
+
+    toggleRead(id){
+        const book = this.books.find(book => book.id === id);
+        if (book) {
+            book.read = true;
+            this.displayBook();
         }
-        
-        readBtn.className ="read-btn";
+    }
 
-        readBtn.addEventListener("click", () => {
-            div.style.background = "green";
-            item.read = true;
-            readBtn.textContent = "Read"
-        })
+    displayBook() {
+        this.container.innerHTML = "";
 
+        this.books.forEach(book => {
+            const div = document.createElement("div");
+            div.className = "book-card";
+            div.dataset.id = item.id;
 
-        const removeBtn = document.createElement("button");
-        removeBtn.textContent = "Remove Book";
-        removeBtn.className = "remove-btn";
+            div.innerHTML = `
+                <p>Book name: ${item.name}</p>
+                <p>Book author: ${item.author}</p>
+                <p>Book gene :${item.genre}</p>
+            `;
 
-        removeBtn.addEventListener("click", (e) => {
-            const id = div.dataset.id;
-            const index = myLibrary.findIndex(book => book.id === id);
-
-            if (index !== -1) {
-                myLibrary.splice(index, 1);
-                displayBook();
+            //read book
+            const readBtn = document.createElement("button");
+            readBtn.className = "read-btn";
+            if(book.read === false) {
+                readBtn.textContent = "Mark as read";
+            } else {
+                readBtn.textContent = "Read";
             }
+            readBtn.addEventListener('click', this.toggleRead(book.id));
+
+            //remove book
+            const removeBtn = document.createElement("button");
+            removeBtn.className = "remove-btn";
+            removeBtn.addEventListener('click', this.removeBook(book.id));
+
+            div.appendChild(readBtn);
+            div.appendChild(removeBtn);
+
+            this.container.appendChild(div);
         });
-
-        div.appendChild(removeBtn);
-        div.appendChild(readBtn);
-        container.appendChild(div);
-    });
-
+    }
 }
+
+const library = new Library();
 
 addBtn.addEventListener("click", (e) => {
     e.preventDefault();
@@ -77,6 +84,5 @@ addBtn.addEventListener("click", (e) => {
     const bookAuthor = document.querySelector("#book-author").value;
     const bookGenre = document.querySelector("#book-genre").value;
     
-    addBookToLibrary(bookName, bookAuthor, bookGenre);
-    displayBook();
-})
+    library.addBook(bookName, bookAuthor, bookGenre);
+});
