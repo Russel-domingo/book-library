@@ -60,6 +60,8 @@ class Library {
                 readBtn.textContent = "Mark as read";
             } else {
                 readBtn.textContent = "Read";
+                readBtn.disabled = "true";
+                div.style.backgroundColor = "green";
             }
             readBtn.addEventListener('click', () => this.toggleRead(book.id));
 
@@ -78,13 +80,20 @@ class Library {
 }
 
 const library = new Library();
+const form = document.querySelector("form");
 
 addBtn.addEventListener("click", (e) => {
     e.preventDefault();
     
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
     const bookName = document.querySelector("#book-name").value;
     const bookAuthor = document.querySelector("#book-author").value;
     const bookGenre = document.querySelector("#book-genre").value;
     
     library.addBook(bookName, bookAuthor, bookGenre);
+
+    form.reset();
 });
