@@ -10,6 +10,7 @@ class Book {
         this.name = name;
         this.author = author;
         this.genre = genre;
+        this.read = false;
     }
 }
 
@@ -21,7 +22,7 @@ class Library {
 
     addBook(name, author, genre){
         const newBook = new Book(name, author, genre);
-        this.books.push[newBook];
+        this.books.push(newBook);
         this.displayBook();
     }
 
@@ -33,7 +34,7 @@ class Library {
     toggleRead(id){
         const book = this.books.find(book => book.id === id);
         if (book) {
-            book.read = true;
+            book.read = !book.read;
             this.displayBook();
         }
     }
@@ -44,12 +45,12 @@ class Library {
         this.books.forEach(book => {
             const div = document.createElement("div");
             div.className = "book-card";
-            div.dataset.id = item.id;
+            div.dataset.id = book.id;
 
             div.innerHTML = `
-                <p>Book name: ${item.name}</p>
-                <p>Book author: ${item.author}</p>
-                <p>Book gene :${item.genre}</p>
+                <p>Book name: ${book.name}</p>
+                <p>Book author: ${book.author}</p>
+                <p>Book gene :${book.genre}</p>
             `;
 
             //read book
@@ -60,12 +61,13 @@ class Library {
             } else {
                 readBtn.textContent = "Read";
             }
-            readBtn.addEventListener('click', this.toggleRead(book.id));
+            readBtn.addEventListener('click', () => this.toggleRead(book.id));
 
             //remove book
             const removeBtn = document.createElement("button");
             removeBtn.className = "remove-btn";
-            removeBtn.addEventListener('click', this.removeBook(book.id));
+            removeBtn.textContent = "Remove Book";
+            removeBtn.addEventListener('click', () => this.removeBook(book.id));
 
             div.appendChild(readBtn);
             div.appendChild(removeBtn);
